@@ -25,6 +25,41 @@ cualquier cliente RTSP de la LAN.
 - **Liberación temporal** de una cámara para poder usar la app Mi Home.
 - **Modo CPU global** (`Lite` / `Auto` / `Calidad`).
 
+## Capturas
+
+> Capturas reales del servicio. Las direcciones IP, el identificador de cuenta y el
+> contenido de vídeo están difuminados.
+
+### Consola de administración
+
+| Panel | Cámaras |
+|---|---|
+| ![Panel](docs/screenshots/panel.png) | ![Cámaras](docs/screenshots/camaras.png) |
+| Estado del servicio, modo CPU, disco y cámaras en vivo. | Perfil HD/SD, liberación para Mi Home y reconexión. |
+
+| Cuentas Xiaomi | Usuarios |
+|---|---|
+| ![Cuentas Xiaomi](docs/screenshots/cuentas.png) | ![Usuarios](docs/screenshots/usuarios.png) |
+| Alta con contraseña o con `passToken` cuando Xiaomi bloquea el login (70016). | Permisos por cámara: ver, oír y hablar. |
+
+| Dispositivos | Token recién creado |
+|---|---|
+| ![Dispositivos](docs/screenshots/dispositivos.png) | ![Token](docs/screenshots/dispositivos-token.png) |
+| Un token por cámara, revocable al instante y con registro de uso. | La URL RTSP con credenciales se muestra una sola vez. |
+
+### Visor y ajustes
+
+| Visor | Ajustes |
+|---|---|
+| ![Visor](docs/screenshots/visor.png) | ![Ajustes](docs/screenshots/ajustes.png) |
+| Rejilla multicámara; clic para pantalla completa, audio y zoom digital. | Modo CPU global, ventana de liberación y cierre por inactividad. |
+
+### Integración con OBS
+
+![Fuente multimedia de OBS](docs/screenshots/obs.png)
+
+*OBS → Fuente multimedia apuntando a la URL RTSP del token de dispositivo.*
+
 ## Arquitectura
 
 Documentación completa en [`Project_Architecture.md`](Project_Architecture.md)

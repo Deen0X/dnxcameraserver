@@ -1,0 +1,33 @@
+{
+  "model": "isa.camera.isc5",
+  "protocol": "legacy",
+  "capabilities": {
+    "video": {
+      "codecs": [
+        "h264",
+        "h265"
+      ],
+      "lenses": 1
+    },
+    "audio": {
+      "out": true,
+      "talk": false
+    },
+    "quality": {
+      "profiles": [
+        "hd",
+        "sd",
+        "auto"
+      ],
+      "native": "hd",
+      "hdIndex": 2
+    },
+    "snapshot": true,
+    "wakeup": false,
+    "ptz": false,
+    "zoom": {
+      "optical": false,
+      "digitalInViewer": true
+    }
+  }
+}

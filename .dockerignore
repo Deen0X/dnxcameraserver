@@ -1,0 +1,16 @@
+bin/
+obj/
+.git/
+.github/
+source_base/
+tests/
+recordings/
+data/camera.db*
+data/go2rtc.yaml
+data/dpkeys/
+data/initial-admin.txt
+dnx-web-ui-style.zip
+*.tar.gz
+docs/
+*.md
+!data/models/**/*.json

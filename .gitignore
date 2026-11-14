@@ -1,0 +1,44 @@
+# ── .NET ──────────────────────────────────────────────
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.idea/
+*.DotSettings.user
+
+# ── Datos y estado en ejecución ───────────────────────
+data/*
+!data/models/
+recordings/
+*.db
+*.db-shm
+*.db-wal
+data/initial-admin.txt
+data/dpkeys/
+data/go2rtc.yaml
+
+# ── Secretos ──────────────────────────────────────────
+.tcloud.env
+.env
+docker/.env
+compose.override.yaml
+appsettings.*.local.json
+
+# ── Artefactos y referencias ──────────────────────────
+source_base/
+*.tar.gz
+*.zip
+dnx-web-ui-style.zip
+
+# ── Sistema ───────────────────────────────────────────
+Thumbs.db
+desktop.ini
+
+# ── Andamiaje local de trabajo con IA (no se publica) ─
+.agent/
+.antigravity/
+.opencode/
+AGENTS.md
+Antigravity_Directives.txt
+DNX_WEB_UI.md

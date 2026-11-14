@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>DNX Camera Server</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0b0f14">
+<meta name="description" content="Servidor LAN de cámaras Xiaomi con visor web y RTSP autenticado">
+<link rel="stylesheet" href="/css/dnx-web-ui.css">
+<link rel="stylesheet" href="/css/app.css">
+<script>
+  // Anti-FOUC: aplica el tema antes del primer render.
+  (function () {
+    var t = localStorage.getItem('dnx_theme') || 'auto';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+</head>
+<body>
+
+<!-- ───────────── Login ───────────── -->
+<div id="login" class="login-wrap is-hidden">
+  <form class="card login-card" id="login-form">
+    <div class="brand login-brand">
+      <img class="logo" src="/assets/logo.png" alt="DNX Camera Server">
+      <div>
+        <b>DNX <span class="muted">Camera</span></b>
+        <div class="ver">consola de administración</div>
+      </div>
+    </div>
+    <p class="muted small">Accede con tu cuenta local. Si el servicio está detrás de
+      Authelia, entrarás directamente sin volver a identificarte.</p>
+    <label class="field">
+      <span>Usuario</span>
+      <input id="login-user" autocomplete="username" required>
+    </label>
+    <label class="field">
+      <span>Contraseña</span>
+      <input id="login-pass" type="password" autocomplete="current-password" required>
+    </label>
+    <div id="login-error" class="badge err is-hidden"></div>
+    <button class="btn" type="submit" style="width:100%;justify-content:center">Entrar</button>
+    <div class="login-foot">
+      <button class="theme-btn" id="login-theme" type="button" aria-label="Cambiar tema">
+        <span class="ico" id="login-theme-ico">🌓</span>
+        <span class="lbl" id="login-theme-lbl">Auto</span>
+      </button>
+      <span class="muted small">DNX Camera Server</span>
+    </div>
+  </form>
+</div>
+
+<!-- ───────────── Instalación (primer administrador) ───────────── -->
+<div id="setup" class="login-wrap is-hidden">
+  <form class="card login-card" id="setup-form">
+    <div class="brand login-brand">
+      <img class="logo" src="/assets/logo.png" alt="DNX Camera Server">
+      <div>
+        <b>DNX <span class="muted">Camera</span></b>
+        <div class="ver">instalación inicial</div>
+      </div>
+    </div>
+    <p class="muted small">Todavía no existe ningún administrador. Crea el tuyo:
+      es la única cuenta que puede gestionar cuentas Xiaomi, cámaras y usuarios.</p>
+    <label class="field">
+      <span>Usuario administrador</span>
+      <input id="setup-user" autocomplete="username" minlength="3" maxlength="64" value="admin" required>
+    </label>
+    <label class="field">
+      <span>Contraseña (mínimo 8 caracteres)</span>
+      <input id="setup-pass" type="password" autocomplete="new-password" minlength="8" required>
+    </label>
+    <label class="field">
+      <span>Repite la contraseña</span>
+      <input id="setup-pass2" type="password" autocomplete="new-password" minlength="8" required>
+    </label>
+    <div id="setup-error" class="badge err is-hidden"></div>
+    <button class="btn" type="submit" style="width:100%;justify-content:center">Crear administrador</button>
+  </form>
+</div>
+
+<!-- ───────────── Shell ───────────── -->
+<div class="app is-hidden" id="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="logo" src="/assets/logo.png" alt="DNX Camera Server">
+      <div>
+        <b>DNX <span class="muted">Camera</span></b>
+        <div class="ver" id="app-version">DNX Camera Server</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <a href="#/panel" data-route="panel"><span class="ico">◧</span>Panel</a>
+      <a href="#/accounts" data-route="accounts" data-admin><span class="ico">☁</span>Cuentas Xiaomi</a>
+      <a href="#/cameras" data-route="cameras" data-admin><span class="ico">▣</span>Cámaras</a>
+      <a href="#/users" data-route="users" data-admin><span class="ico">☰</span>Usuarios</a>
+      <a href="#/tokens" data-route="tokens" data-admin><span class="ico">⚿</span>Dispositivos</a>
+      <a href="#/audit" data-route="audit" data-admin><span class="ico">≡</span>Auditoría</a>
+      <a href="#/settings" data-route="settings" data-admin><span class="ico">⚙</span>Ajustes</a>
+      <a href="#/viewer" data-route="viewer"><span class="ico">▶</span>Visor</a>
+    </nav>
+
+    <div class="foot">
+      <div class="user-card">
+        <div class="avatar">👤</div>
+        <div class="user-meta"><b id="me-name">—</b><span id="me-role">—</span></div>
+      </div>
+      <button class="user-logout" id="logout"><span class="ico">✕</span> Cerrar sesión</button>
+      <button class="user-logout" id="chpass"><span class="ico">🔑</span> Cambiar contraseña</button>
+      <button class="theme-btn" id="theme-btn" aria-label="Cambiar tema">
+        <span class="ico" id="theme-ico">🌓</span>
+        <span class="lbl" id="theme-lbl">Auto</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" id="menu-btn" aria-label="Abrir menú">
+        <span class="hamb">☰</span>
+      </button>
+      <div class="grow">
+        <h1 id="title">Panel</h1>
+        <div class="sub" id="subtitle">Estado general del servicio</div>
+      </div>
+      <span class="badge live-badge" id="live" role="button" tabindex="0"
+        title="Actualizar (clic)" aria-label="Actualizar">
+        <span class="dot ok" id="live-dot"></span><span id="live-text">en vivo</span>
+      </span>
+    </div>
+
+    <div id="view"></div>
+  </main>
+</div>
+
+<div id="drawer-overlay"></div>
+<div id="toast"></div>
+<div id="modal-root"></div>
+
+<script src="/js/theme-drawer.js"></script>
+<script src="/js/player.js"></script>
+<script src="/js/views.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+/* DNX Camera Server — estilos específicos del producto sobre DNX Web UI. */
+
+.is-hidden { display: none !important; }
+
+/* ── Login ─────────────────────────────────────────────────── */
+.login-wrap {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(1200px 600px at 50% -10%, rgba(59, 130, 246, .12), transparent 60%), var(--bg);
+}
+.login-card { width: min(420px, 100%); padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+.login-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 2px; }
+.login-brand .logo { width: 52px; height: 52px; border-radius: 14px; }
+.login-brand b { font-size: 20px; letter-spacing: -.01em; }
+.login-brand .ver { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.login-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-top: 2px; padding-top: 10px; border-top: 1px solid var(--line);
+}
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--muted); }
+.field input { width: 100%; }
+
+/* ── Utilidades ────────────────────────────────────────────── */
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.row.end { justify-content: flex-end; }
+.grow { flex: 1; }
+.mono { font-family: "Cascadia Code", Consolas, monospace; font-size: 12px; }
+.nowrap { white-space: nowrap; }
+.center { text-align: center; }
+.pill { font-size: 11px; padding: 2px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
+
+/* ── Rejilla de cámaras ────────────────────────────────────── */
+.cam-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.cam-tile {
+  position: relative; background: #000; border: 1px solid var(--line);
+  border-radius: var(--radius); overflow: hidden; aspect-ratio: 16 / 9; cursor: zoom-in;
+}
+.cam-tile video, .cam-tile img { width: 100%; height: 100%; object-fit: contain; display: block; background: #000; }
+.cam-tile .overlay {
+  position: absolute; inset: auto 0 0 0; display: flex; gap: 8px; align-items: center;
+  padding: 6px 8px; background: linear-gradient(transparent, rgba(0,0,0,.72));
+  color: #fff; font-size: 12px;
+}
+.cam-tile .corner { position: absolute; top: 6px; right: 6px; display: flex; gap: 6px; }
+.cam-tile.offline video, .cam-tile.offline img { filter: grayscale(1) brightness(.4); }
+.cam-tile .state { font-size: 11px; opacity: .9; }
+.cam-tile .spinner {
+  position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 12px;
+}
+.badge.clickable { cursor: pointer; }
+
+/* ── Fullscreen ────────────────────────────────────────────── */
+.stage {
+  position: fixed; inset: 0; z-index: 60; background: #000;
+  display: flex; flex-direction: column;
+}
+.stage-head {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: rgba(0,0,0,.55); color: #fff; font-size: 13px;
+}
+.stage-body { position: relative; flex: 1; overflow: hidden; display: grid; place-items: center; }
+.zoom-wrap { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+.zoom-wrap video { max-width: 100%; max-height: 100%; transition: transform .08s linear; transform-origin: center center; }
+.stage-foot {
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; padding: 8px; border-radius: 999px;
+  background: rgba(20,26,34,.82); border: 1px solid rgba(255,255,255,.12);
+}
+.stage-foot .btn { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.16); }
+
+/* ── Formularios en modal ──────────────────────────────────── */
+.modal-card form { display: flex; flex-direction: column; gap: 12px; }
+.grid-2 { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+.grid-3 { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }
+.hint { font-size: 12px; color: var(--muted); }
+.code-box {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px; font-family: "Cascadia Code", Consolas, monospace; font-size: 12px;
+  word-break: break-all; user-select: all;
+}
+.grants-grid { display: grid; gap: 6px; max-height: 320px; overflow: auto; }
+.grant-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; align-items: center; }
+.captcha-img { background: #fff; border-radius: 6px; max-height: 70px; }
+
+@media (max-width: 820px) {
+  .cam-grid { grid-template-columns: 1fr; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}

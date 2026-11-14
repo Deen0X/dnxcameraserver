@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DNXCameraServer.Data/DNXCameraServer.Data.csproj" />
+    <Project Path="src/DNXCameraServer.Domain/DNXCameraServer.Domain.csproj" />
+    <Project Path="src/DNXCameraServer.Web/DNXCameraServer.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DNXCameraServer.Tests/DNXCameraServer.Tests.csproj" />
+  </Folder>
+</Solution>

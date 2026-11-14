@@ -1,0 +1,64 @@
+# DNX Camera Server — despliegue en LAN con red de host (ADR-003).
+#
+# Requisitos: host Linux (amd64/arm64) con Docker y Compose.
+# `network_mode: host` es obligatorio: el P2P de Xiaomi necesita UDP con la IP
+# real y CS2 usa broadcast; WebRTC necesita candidatos alcanzables.
+#
+#   docker compose up -d --build
+#   docker compose logs -f
+#
+# Puerto de la app: 8090  ·  RTSP: 8554  ·  WebRTC: 8555/udp
+
+services:
+  dnxcameraserver:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: dnxcameraserver:0.1.0
+    container_name: dnxcameraserver
+    network_mode: host
+    restart: unless-stopped
+    stop_grace_period: 30s
+    # Mismo UID/GID que el usuario del host: /data y /recordings quedan legibles.
+    user: "1000:1000"
+
+    volumes:
+      - ./data:/data
+      - ./recordings:/recordings
+
+    environment:
+      TZ: Europe/Madrid
+      ASPNETCORE_HTTP_PORTS: "8090"
+      LAN_CIDR: 192.168.1.0/24
+      WEBRTC_CANDIDATE: 192.168.1.10:8555
+      RTSP_LISTEN_PORT: "8554"
+      GO2RTC_BINARY: /opt/go2rtc/go2rtc
+      GO2RTC_API: http://127.0.0.1:1984
+      GO2RTC_RTSP: 127.0.0.1:18554
+      DATA_DIR: /data
+      RECORDINGS_DIR: /recordings
+      CPU_MODE: Auto
+      # Sin contraseñas por defecto: la web pide crear el administrador la
+      # primera vez. Para resetearlo:
+      #   docker compose stop
+      #   docker compose run --rm dnxcameraserver --reset-admin-password
+      #   docker compose start
+      # SSO por cabecera (opcional, ADR-016). Si Authelia deja de enviarla,
+      # la aplicación muestra su login local.
+      SSO_ENABLED: "false"
+      SSO_HEADER: Remote-User
+      SSO_TRUSTED_PROXIES: ""
+      DNX_VERSION: "0.1.0"
+
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8090/readyz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

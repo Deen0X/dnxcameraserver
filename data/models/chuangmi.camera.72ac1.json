@@ -1,0 +1,33 @@
+{
+  "model": "chuangmi.camera.72ac1",
+  "protocol": "miss",
+  "capabilities": {
+    "video": {
+      "codecs": [
+        "h264",
+        "h265"
+      ],
+      "lenses": 1
+    },
+    "audio": {
+      "out": true,
+      "talk": true
+    },
+    "quality": {
+      "profiles": [
+        "hd",
+        "sd",
+        "auto"
+      ],
+      "native": "hd",
+      "hdIndex": 3
+    },
+    "snapshot": true,
+    "wakeup": false,
+    "ptz": false,
+    "zoom": {
+      "optical": false,
+      "digitalInViewer": true
+    }
+  }
+}
